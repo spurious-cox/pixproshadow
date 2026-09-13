@@ -84,6 +84,89 @@ property debugMode : false
 -- of the build being driven, e.g. "/Applications/Pixelmator Pro_3.8.app".
 -- ============================================================
 property kPixIDs : {"com.apple.pixelmator", "com.pixelmatorteam.pixelmator.x"}
+
+property scriptVersion : "7.6.0"
+
+-- ============================================================
+-- UPDATE CHECK (reports only, never downloads)
+-- ============================================================
+-- Asks GitHub for the newest published tag and adds a line to the prompt when
+-- this build is behind. It never downloads or replaces anything: a running
+-- bundle cannot safely overwrite its own files, and getting that wrong costs
+-- the app.
+--
+-- Checked once a day at most and capped at three seconds, so a slow or absent
+-- network barely shows. The tag and the day it was fetched are kept in the
+-- same defaults file as the settings.
+--
+-- The JSON is picked apart with grep and cut rather than a parser: a stranger's
+-- Mac is not guaranteed to have python3, and the tag is the only field wanted.
+property kSlug : "pixproshadow"
+property kDefaults : "$HOME/.shadowtext_defaults"
+
+on versionParts(v)
+	set out to {}
+	set AppleScript's text item delimiters to "."
+	set pieces to text items of v
+	set AppleScript's text item delimiters to ""
+	repeat with piece in pieces
+		set digits to ""
+		repeat with c in (characters of (piece as text))
+			if c is in "0123456789" then set digits to digits & c
+		end repeat
+		if digits is "" then set digits to "0"
+		set end of out to digits as integer
+	end repeat
+	return out
+end versionParts
+
+on isNewer(tag, mine)
+	-- Compared as integers, so 3.10.0 comes out above 3.9.0 rather than below.
+	set a to my versionParts(tag)
+	set b to my versionParts(mine)
+	repeat with i from 1 to 3
+		set x to 0
+		set y to 0
+		if i ≤ (count a) then set x to item i of a
+		if i ≤ (count b) then set y to item i of b
+		if x > y then return true
+		if x < y then return false
+	end repeat
+	return false
+end isNewer
+
+on latestTag()
+	set today to do shell script "/bin/date +%Y-%m-%d"
+	set lastDay to ""
+	try
+		set lastDay to do shell script "defaults read " & kDefaults & " updateCheckedOn 2>/dev/null"
+	end try
+	if lastDay is today then
+		try
+			return do shell script "defaults read " & kDefaults & " updateLatestTag 2>/dev/null"
+		end try
+		return ""
+	end if
+	try
+		set tag to do shell script "/usr/bin/curl -sL --max-time 3 -H \"Accept: application/vnd.github+json\" https://api.github.com/repos/spurious-cox/" & kSlug & "/releases/latest | /usr/bin/grep -o '\"tag_name\": *\"[^\"]*\"' | /usr/bin/head -1 | /usr/bin/cut -d'\"' -f4"
+		do shell script "defaults write " & kDefaults & " updateLatestTag " & quoted form of tag
+		do shell script "defaults write " & kDefaults & " updateCheckedOn " & quoted form of today
+		return tag
+	on error
+		return ""
+	end try
+end latestTag
+
+on updateNotice(mine)
+	set tag to my latestTag()
+	if tag is "" then return ""
+	if not (my isNewer(tag, mine)) then return ""
+	set t to tag
+	if t starts with "v" then set t to text 2 thru -1 of t
+	return return & return & "Update available: " & t & "  —  brew upgrade --cask " & kSlug
+end updateNotice
+
+
 property pixApp : ""
 
 -- ============================================================
@@ -300,7 +383,7 @@ tell application pixApp
 					"  2 → END color    (deepest layer)" & return & return & ¬
 					"The color picker opens twice." & return & ¬
 					¬
-						"Use the eyedropper to sample any color on screen." buttons {"Read Me", "Open Color Picker"} default button "Open Color Picker")
+						"Use the eyedropper to sample any color on screen." & my updateNotice(scriptVersion) buttons {"Read Me", "Open Color Picker"} default button "Open Color Picker")
 				if rmChoice is not "Read Me" then exit repeat
 				my showReadMe()
 			end repeat
