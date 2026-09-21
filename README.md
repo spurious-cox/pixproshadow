@@ -1,4 +1,4 @@
-# PixProShadow
+# PixProShadow 7.6.3
 
 Builds a deep extruded shadow — the long-shadow, 3-D block look — behind a
 Pixelmator Pro layer, from a stack of offset copies merged into one layer.
@@ -11,9 +11,6 @@ or install it with Homebrew:
 ```
 brew install --cask spurious-cox/tap/pixproshadow
 ```
-
-*7.6.3 fixes a first run that could hang with nothing on screen, and makes the version in its dialogs match the app again.*
-
 Requires Pixelmator Pro. Both the 3.x build and the Creator Studio build work;
 the app binds to whichever one is in front or has a document open.
 
