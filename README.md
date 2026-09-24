@@ -1,4 +1,4 @@
-# PixProShadow 7.6.3
+# PixProShadow 7.6.4
 
 Builds a deep extruded shadow — the long-shadow, 3-D block look — behind a
 Pixelmator Pro layer, from a stack of offset copies merged into one layer.
