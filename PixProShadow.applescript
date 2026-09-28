@@ -1,6 +1,6 @@
 -- ============================================================
 -- PixProShadow.applescript
--- Version 7.6.5  (2026-09-28)
+-- Version 7.6.6  (2026-09-28)
 --
 -- New in 7.5.0: targets the running Pixelmator by BUNDLE PATH rather than by
 --   bundle id, so it works with whichever build and whichever COPY of a build
@@ -85,7 +85,7 @@ property debugMode : false
 -- ============================================================
 property kPixIDs : {"com.apple.pixelmator", "com.pixelmatorteam.pixelmator.x"}
 
-property scriptVersion : "7.6.5"
+property scriptVersion : "7.6.6"
 
 -- ============================================================
 -- UPDATE CHECK (reports only, never downloads)
