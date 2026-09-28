@@ -1,4 +1,4 @@
-# PixProShadow 7.6.4
+# PixProShadow 7.6.5
 
 Builds a deep extruded shadow — the long-shadow, 3-D block look — behind a
 Pixelmator Pro layer, from a stack of offset copies merged into one layer.
@@ -26,6 +26,8 @@ the app binds to whichever one is in front or has a document open.
    takes pixels, millimeters (`5mm`) or math (`72/25.4*5`). The prompt suggests
    a depth that suits the selected layer.
 
+   ![Every shadow angle and the way the shadow extends](PixProShadow-angles.png)
+
 ## What you get
 
 A group named after the source layer: a pixel copy, the merged shadow, and your
@@ -44,6 +46,10 @@ into a single shadow layer beneath the original.
 ```
 osacompile -o /tmp/PixProShadow.scpt PixProShadow.applescript
 ```
+
+The Read Me button opens `PixProShadow-README.rtfd` from the app's Resources: the
+text Read Me with `PixProShadow-angles.png` in place, built by
+`~/My_Applications/_signing/pixpro_readme_rtfd.py PixProShadow-README.txt <out.rtfd> PixProShadow-angles.png`.
 
 Signing uses a Developer ID certificate selected by SHA-1 hash and timestamped,
 which is what keeps macOS's Automation grant alive across rebuilds.

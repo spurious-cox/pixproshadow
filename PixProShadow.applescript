@@ -1,6 +1,6 @@
 -- ============================================================
 -- PixProShadow.applescript
--- Version 7.5.0  (2026-08-15)
+-- Version 7.6.5  (2026-09-28)
 --
 -- New in 7.5.0: targets the running Pixelmator by BUNDLE PATH rather than by
 --   bundle id, so it works with whichever build and whichever COPY of a build
@@ -30,7 +30,7 @@
 -- selected layer in Pixelmator Pro. Works with text layers,
 -- shape layers, and image layers. Prompts the user for:
 --   • Shadow gradient (two-color, interpolated across ALL layers)
---   • Shadow angle (0-360 counter-clockwise, 0=right)
+--   • Shadow angle (0-360 counter-clockwise: 0=left, 90=down, 180=right)
 --   • Shadow depth (pixels, mm, or math expression)
 --
 -- Depth field accepts:
@@ -85,7 +85,7 @@ property debugMode : false
 -- ============================================================
 property kPixIDs : {"com.apple.pixelmator", "com.pixelmatorteam.pixelmator.x"}
 
-property scriptVersion : "7.6.4"
+property scriptVersion : "7.6.5"
 
 -- ============================================================
 -- UPDATE CHECK (reports only, never downloads)
@@ -178,8 +178,10 @@ property pixApp : ""
 -- ============================================================
 on showReadMe()
 	try
-		set rmRef to (path to resource "PixProShadow-README.txt")
-		do shell script "open -e " & quoted form of (POSIX path of rmRef)
+		-- The RTFD is the text README with the angle diagram in place; TextEdit
+		-- shows both.
+		set rmRef to (path to resource "PixProShadow-README.rtfd")
+		do shell script "open -a TextEdit " & quoted form of (POSIX path of rmRef)
 	on error
 		tell me to activate
 		display dialog "The Read Me is missing from the app bundle." buttons {"OK"} default button "OK"

@@ -32,6 +32,7 @@ Defaults: plist of saved settings (colors stored as normalized R,G,B)
            Angle   counter-clockwise: 0=left, 90=down, 180=right, 270=up
            Depth   pixels (25), millimeters (5mm) or math (72/25.4*5)
        The dialog suggests a depth that suits the selected layer.
+       Every direction is drawn in PixProShadow-angles.png.
 
     5. Click OK and let it build.
 
