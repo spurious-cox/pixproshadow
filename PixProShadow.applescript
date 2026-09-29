@@ -1,6 +1,6 @@
 -- ============================================================
 -- PixProShadow.applescript
--- Version 7.6.6  (2026-09-28)
+-- Version 7.6.7  (2026-09-28)
 --
 -- New in 7.5.0: targets the running Pixelmator by BUNDLE PATH rather than by
 --   bundle id, so it works with whichever build and whichever COPY of a build
@@ -85,7 +85,7 @@ property debugMode : false
 -- ============================================================
 property kPixIDs : {"com.apple.pixelmator", "com.pixelmatorteam.pixelmator.x"}
 
-property scriptVersion : "7.6.6"
+property scriptVersion : "7.6.7"
 
 -- ============================================================
 -- UPDATE CHECK (reports only, never downloads)
@@ -323,8 +323,17 @@ tell application pixApp
 	activate
 	tell front document
 		
+		-- A layer inside a group reports its index within that GROUP, but
+		-- every step below addresses the document's top-level layers, so it
+		-- would copy the wrong layer. Refuse it instead.
+		set layerIsNested to false
+		try
+			if class of (parent of current layer) is group layer then set layerIsNested to true
+		end try
 		if not (count selected layers) = 1 then
 			display alert "Make sure a single layer is selected."
+		else if layerIsNested then
+			display alert "That layer is inside a group." message "PixProShadow works on layers at the top level of the Layers list. Drag the layer out of its group to the top level, run PixProShadow again, then move the result back wherever you like."
 		else
 			
 			-- ── Record original layer info ─────────────────────────────────

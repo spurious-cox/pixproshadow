@@ -10,7 +10,7 @@ builds the extrusion out of a stack of offset copies and merges it into a
 single shadow layer.
 
 Applet:   /Applications/PixProShadow.app
-Source:   ~/My_Applications/PixProShadow/PixProShadow.applescript
+Source:   PixProShadow.applescript in this repository
 Defaults: plist of saved settings (colors stored as normalized R,G,B)
 
 
@@ -19,7 +19,9 @@ Defaults: plist of saved settings (colors stored as normalized R,G,B)
 -----------------------------------------------------------------------------
 
     1. In Pixelmator Pro, select the one layer you want the shadow behind.
-       Text, shape and image layers all work.
+       Text, shape and image layers all work. It has to be at the TOP
+       LEVEL of the Layers list; if it is inside a group, drag it out
+       first and move the result back afterward.
 
     2. Run PixProShadow (/Applications/PixProShadow.app).
 
@@ -155,7 +157,7 @@ v7.3.0  (2026-08-10)
 v7.4.0  (2026-08-10)
     Read Me button. This README is now copied into the app bundle's own
     Contents/Resources at build time and opened via `path to resource`, so it
-    travels inside the app — nothing depends on ~/My_Applications or any other
+    travels inside the app — nothing depends on any
     external path. The button sits on the colour-picker entry prompt and returns you
     to the prompt after the Read Me opens.
 
